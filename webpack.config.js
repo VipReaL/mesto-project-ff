@@ -10,6 +10,7 @@ module.exports = {
     filename: 'main.js',
     publicPath: ''
   },
+  mode: 'development',
   module: {
     rules: [{
       test: /\.js$/,
