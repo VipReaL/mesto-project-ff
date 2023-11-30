@@ -20,71 +20,62 @@
 Также в index.js находится код, который отвечает за отображение шести карточек при открытии страницы.
 */
 
+
 import './pages/index.css';
-import {initialCards} from './scripts/cards.js'
-import {createCard, deleteCard} from './scripts/card.js'
+import { initialCards } from './scripts/cards.js'
+import { createCard, deleteCard } from './scripts/card.js'
+import { openPopup, closePopup } from './scripts/modal.js'
 
-// @todo: DOM узлы
 
+// DOM узлы
 const placesList = document.querySelector('.places__list');
 
-// @todo: Функция добавления карточки в разметку
+// Модальное окно редактирования профиля
+const profileEditButton = document.querySelector('.profile__edit-button');
+const popupTypeEdit = document.querySelector('.popup_type_edit');
 
+// Модальное окна добавление карточки "Нового места"
+const profileAddButton = document.querySelector('.profile__add-button');
+const popupTypeNewCard = document.querySelector('.popup_type_new-card');
+
+// Модальное окно полноэкранного просмотра картинки карточки
+const popupTypeImage = document.querySelector('.popup_type_image');
+
+// Закрытие модального окна
+const pageContent = document.querySelector('.page__content');
+
+
+
+// Функция добавления карточки в разметку
 function addCard (markupCard) {
   placesList.append(markupCard);
 }
 
-// @todo: Вывести карточки на страницу
-
+// Вывод карточек на страницу
 initialCards.forEach(function (item) {
   addCard(createCard(item.link, item.name, deleteCard));
 });
 
-// @todo: Открытие и закрытие модального окна
+// Открытие модального окна редактирования профиля
+profileEditButton.addEventListener('click', function () {
+  openPopup(popupTypeEdit);
+});
 
-/*
-В проекте есть три модальных окна.
-Они открываются по нажатию кнопок:
-«Редактировать»,
-«+»,
-при нажатии на картинку,
-а закрываются — при клике по крестику в правом верхнем углу:
-*/
+// Открытие модального окна добавление карточки "Нового места"
+profileAddButton.addEventListener('click', function () {
+  openPopup(popupTypeNewCard);
+});
 
-// Контеинер page__content для addEventListener (Кнопки открытия попапов)
-
-const pageContent = document.querySelector('.page__content');
-
-// display: flex
-
-const popupTypeEdit = document.querySelector('.popup_type_edit');
-const popupTypeNewCard = document.querySelector('.popup_type_new-card');
-const popupTypeImage = document.querySelector('.popup_type_image');
-
-function openPopup (evt) {
-  if (evt.target.classList.value === 'profile__edit-button') {
-    popupTypeEdit.setAttribute('style', 'display: flex');
-  } else if (evt.target.classList.value === 'profile__add-button') {
-    popupTypeNewCard.setAttribute('style', 'display: flex');
-  } else if (evt.target.classList.value === 'card__image') {
-    popupTypeImage.setAttribute('style', 'display: flex')
+// Открытие модального окна полноэкранного просмотра картинки карточки
+placesList.addEventListener('click', function (evt) {
+  if (evt.target.classList.contains('card__image')) {
+    openPopup(popupTypeImage);
   }
-}
+});
 
-pageContent.addEventListener('click', openPopup);
-
-// Кнопки закрытия попапов
-
-const ButtonsClosingPopups = document.querySelectorAll('.popup__close');
-
-function closePopup (evt) {
-  if (evt.target.closest('div').parentElement === 'profile__edit-button') {
-    popupTypeEdit.removeAttribute('style');
-  } else if (evt.target.closest('div').parentElement === 'profile__add-button') {
-    popupTypeNewCard.removeAttribute('style');
-  } else if (evt.target.closest('div').parentElement === 'card__image') {
-    popupTypeImage.removeAttribute('style')
+// Закрытие модальных окон
+pageContent.addEventListener('click', function (evt) {
+  if (evt.target.classList.contains('popup__close')) {
+    closePopup(evt.target.parentNode.parentNode);
   }
-}
-
-pageContent.addEventListener('click', closePopup);
+});

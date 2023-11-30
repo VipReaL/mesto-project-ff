@@ -8,3 +8,16 @@
 функция-обработчик события нажатия Esc,
 функция-обработчик события клика по оверлею;
 */
+
+
+// функция открытия модальных окон
+function openPopup (evt) {
+  evt.classList.add('popup_is-opened');
+}
+
+// функция закрытия модальных окон
+function closePopup (evt) {
+  evt.classList.remove('popup_is-opened');
+}
+
+export { openPopup, closePopup }

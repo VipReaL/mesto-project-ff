@@ -38,4 +38,4 @@ function deleteCard (event) {
   event.target.closest('.card').remove();
 }
 
-export {createCard, deleteCard}
+export { createCard, deleteCard }
