@@ -24,7 +24,7 @@
 import './pages/index.css';
 import { initialCards } from './scripts/cards.js'
 import { createCard, deleteCard } from './scripts/card.js'
-import { openPopup, closePopup } from './scripts/modal.js'
+import { openModal, closeModal, getPressKey, getClickOverlay } from './scripts/modal.js'
 
 
 // DOM узлы
@@ -58,24 +58,30 @@ initialCards.forEach(function (item) {
 
 // Открытие модального окна редактирования профиля
 profileEditButton.addEventListener('click', function () {
-  openPopup(popupTypeEdit);
+  openModal(popupTypeEdit);
+  getPressKey();
+  getClickOverlay();
 });
 
 // Открытие модального окна добавление карточки "Нового места"
 profileAddButton.addEventListener('click', function () {
-  openPopup(popupTypeNewCard);
+  openModal(popupTypeNewCard);
+  getPressKey();
+  getClickOverlay();
 });
 
 // Открытие модального окна полноэкранного просмотра картинки карточки
 placesList.addEventListener('click', function (evt) {
   if (evt.target.classList.contains('card__image')) {
-    openPopup(popupTypeImage);
+    openModal(popupTypeImage);
+    getPressKey();
+    getClickOverlay();
   }
 });
 
-// Закрытие модальных окон
+// Закрытие модальных окон крестиком
 pageContent.addEventListener('click', function (evt) {
   if (evt.target.classList.contains('popup__close')) {
-    closePopup(evt.target.parentNode.parentNode);
+    closeModal(evt.target.closest('.popup'));
   }
 });
