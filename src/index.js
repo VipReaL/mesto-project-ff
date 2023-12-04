@@ -29,10 +29,15 @@ import { openModal, closeModal, getPressKey, getClickOverlay } from './scripts/m
 
 // DOM узлы
 const placesList = document.querySelector('.places__list');
+const profileTitle = document.querySelector('.profile__title');
+const profileDescription = document.querySelector('.profile__description');
 
 // Модальное окно редактирования профиля
 const profileEditButton = document.querySelector('.profile__edit-button');
 const popupTypeEdit = document.querySelector('.popup_type_edit');
+const formElement = document.querySelector('.popup__form');
+const nameInput = document.querySelector('.popup__input_type_name');
+const jobInput = document.querySelector('.popup__input_type_description');
 
 // Модальное окна добавление карточки "Нового места"
 const profileAddButton = document.querySelector('.profile__add-button');
@@ -61,6 +66,8 @@ profileEditButton.addEventListener('click', function () {
   openModal(popupTypeEdit);
   getPressKey();
   getClickOverlay();
+  nameInput.value = profileTitle.textContent;
+  jobInput.value = profileDescription.textContent;
 });
 
 // Открытие модального окна добавление карточки "Нового места"
@@ -85,3 +92,37 @@ pageContent.addEventListener('click', function (evt) {
     closeModal(evt.target.closest('.popup'));
   }
 });
+
+// Редактирование имени и информации о себе
+function handleFormSubmit(evt) {
+  evt.preventDefault();
+  profileTitle.textContent = nameInput.value;
+  profileDescription.textContent = jobInput.value;
+}
+
+formElement.addEventListener('submit', handleFormSubmit);
+
+// Получение данных карточки от пользователя
+const newPlace = document.forms['new-place'];
+const placeName = newPlace.elements['place-name'];
+const link = newPlace.elements['link'];
+
+function addCardUser(evt) {
+  evt.preventDefault();
+  
+  placesList.prepend(createCard(link.value, placeName.value, deleteCard));
+
+  newPlace.reset();
+  closeModal(evt.target.closest('.popup'));
+}
+
+newPlace.addEventListener('submit', addCardUser);
+
+// Лайк карточки TODO: передать в функцию создания карточки
+function like () {
+  document.addEventListener('click', function (evt) {
+    if (evt.target.classList.contains('card__like-button')) {
+      evt.target.classList.toggle('card__like-button_is-active')
+    }
+  });
+}
