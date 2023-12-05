@@ -11,13 +11,9 @@
 функции-обработчики событий удаления и лайка карточки;
 */
 
-// @todo: Темплейт карточки
 
-// const template = document.querySelector('#card-template').content;
-
-// @todo: Функция создания карточки
-
-function createCard (imageSrc, nameValue, deleteHandler) {
+//Функция создания карточки
+function createCard (imageSrc, nameValue, deleteHandler, likeButton, openImage) {
   const template = document.querySelector('#card-template').content;
   const templateElement = template.querySelector('.card').cloneNode(true);
 
@@ -29,13 +25,36 @@ function createCard (imageSrc, nameValue, deleteHandler) {
   const deleteButton = templateElement.querySelector('.card__delete-button');
   deleteButton.addEventListener('click', deleteHandler);
 
+  document.addEventListener('click', likeButton);
+
+  document.addEventListener('click', openImage);
+
   return templateElement
 }
 
-// @todo: Функция удаления карточки
+// const popupImage = document.querySelector('.popup__image');
+// const popupCaption = document.querySelector('.popup__caption');
 
+// function openImage (evt) {
+//   if (evt.target.classList.contains('card__image')) {
+//     openModal(popupTypeImage);
+//     popupImage.src = 'item.link';
+//     popupCaption.textContent = 'fkfgftdcr';
+//     getPressKey();
+//     getClickOverlay();
+//     }
+// }
+
+// Функция удаления карточки
 function deleteCard (event) {
   event.target.closest('.card').remove();
 }
 
-export { createCard, deleteCard }
+// Функция лайк карточки
+function likeCard (evt) {
+  if (evt.target.classList.contains('card__like-button')) {
+    evt.target.classList.toggle('card__like-button_is-active')
+  }
+}
+
+export { createCard, deleteCard, likeCard }

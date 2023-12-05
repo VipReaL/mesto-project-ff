@@ -23,7 +23,7 @@
 
 import './pages/index.css';
 import { initialCards } from './scripts/cards.js'
-import { createCard, deleteCard } from './scripts/card.js'
+import { createCard, deleteCard, likeCard } from './scripts/card.js'
 import { openModal, closeModal, getPressKey, getClickOverlay } from './scripts/modal.js'
 
 
@@ -42,9 +42,14 @@ const jobInput = document.querySelector('.popup__input_type_description');
 // Модальное окна добавление карточки "Нового места"
 const profileAddButton = document.querySelector('.profile__add-button');
 const popupTypeNewCard = document.querySelector('.popup_type_new-card');
+const newPlace = document.forms['new-place'];
+const placeName = newPlace.elements['place-name'];
+const link = newPlace.elements['link'];
 
 // Модальное окно полноэкранного просмотра картинки карточки
 const popupTypeImage = document.querySelector('.popup_type_image');
+const popupImage = document.querySelector('.popup__image');
+const popupCaption = document.querySelector('.popup__caption');
 
 // Закрытие модального окна
 const pageContent = document.querySelector('.page__content');
@@ -58,7 +63,7 @@ function addCard (markupCard) {
 
 // Вывод карточек на страницу
 initialCards.forEach(function (item) {
-  addCard(createCard(item.link, item.name, deleteCard));
+  addCard(createCard(item.link, item.name, deleteCard, likeCard, openPopupImage));
 });
 
 // Открытие модального окна редактирования профиля
@@ -75,15 +80,6 @@ profileAddButton.addEventListener('click', function () {
   openModal(popupTypeNewCard);
   getPressKey();
   getClickOverlay();
-});
-
-// Открытие модального окна полноэкранного просмотра картинки карточки
-placesList.addEventListener('click', function (evt) {
-  if (evt.target.classList.contains('card__image')) {
-    openModal(popupTypeImage);
-    getPressKey();
-    getClickOverlay();
-  }
 });
 
 // Закрытие модальных окон крестиком
@@ -103,26 +99,23 @@ function handleFormSubmit(evt) {
 formElement.addEventListener('submit', handleFormSubmit);
 
 // Получение данных карточки от пользователя
-const newPlace = document.forms['new-place'];
-const placeName = newPlace.elements['place-name'];
-const link = newPlace.elements['link'];
-
 function addCardUser(evt) {
   evt.preventDefault();
-  
-  placesList.prepend(createCard(link.value, placeName.value, deleteCard));
-
+  placesList.prepend(createCard(link.value, placeName.value, deleteCard, likeCard));
   newPlace.reset();
   closeModal(evt.target.closest('.popup'));
 }
 
 newPlace.addEventListener('submit', addCardUser);
 
-// Лайк карточки TODO: передать в функцию создания карточки
-function like () {
-  document.addEventListener('click', function (evt) {
-    if (evt.target.classList.contains('card__like-button')) {
-      evt.target.classList.toggle('card__like-button_is-active')
-    }
-  });
-}
+// Открытие модального окна с картинкой
+function openPopupImage (evt) {
+  if (evt.target.classList.contains('card__image')) {
+    openModal(popupTypeImage);
+    popupImage.src = evt.target.src;
+    popupImage.alt = evt.target.alt;
+    popupCaption.textContent = evt.target.alt
+    getPressKey();
+    getClickOverlay();
+  }
+};
