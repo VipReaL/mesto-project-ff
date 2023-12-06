@@ -1,17 +1,3 @@
-/*
-Функции для работы с карточками проекта Mesto вынесите в файл card.js,
-из него должна экспортироваться функция createCard,
-которую вы создали раньше (у вас она может называться по-другому).
-
-Функции, обрабатывающие события лайка и удаления карточки,
-также должны находиться в этом файле и экспортироваться из него.
-
-в файле card.js описаны функции для работы с карточками:
-функция создания карточки,
-функции-обработчики событий удаления и лайка карточки;
-*/
-
-
 //Функция создания карточки
 function createCard (imageSrc, nameValue, deleteHandler, likeButton, openImage) {
   const template = document.querySelector('#card-template').content;
@@ -31,19 +17,6 @@ function createCard (imageSrc, nameValue, deleteHandler, likeButton, openImage) 
 
   return templateElement
 }
-
-// const popupImage = document.querySelector('.popup__image');
-// const popupCaption = document.querySelector('.popup__caption');
-
-// function openImage (evt) {
-//   if (evt.target.classList.contains('card__image')) {
-//     openModal(popupTypeImage);
-//     popupImage.src = 'item.link';
-//     popupCaption.textContent = 'fkfgftdcr';
-//     getPressKey();
-//     getClickOverlay();
-//     }
-// }
 
 // Функция удаления карточки
 function deleteCard (event) {
