@@ -11,9 +11,11 @@ function createCard (imageSrc, nameValue, deleteHandler, likeButton, openImage) 
   const deleteButton = templateElement.querySelector('.card__delete-button');
   deleteButton.addEventListener('click', deleteHandler);
 
-  document.addEventListener('click', likeButton);
+  const cardLikeButton = templateElement.querySelector('.card__like-button');
+  cardLikeButton.addEventListener('mousedown', likeButton);
 
-  document.addEventListener('click', openImage);
+  const cardImage = templateElement.querySelector('.card__image');
+  cardImage.addEventListener('mousedown', openImage);
 
   return templateElement
 }
