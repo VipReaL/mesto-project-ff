@@ -1,7 +1,7 @@
 import './pages/index.css';
 import { initialCards } from './scripts/cards.js'
 import { createCard, deleteCard, likeCard } from './scripts/card.js'
-import { openModal, closeModal, getPressKey, getClickOverlay } from './scripts/modal.js'
+import { openModal, closeModal, getPressKey } from './scripts/modal.js'
 
 
 // DOM узлы
@@ -42,11 +42,32 @@ initialCards.forEach(function (item) {
   addCard(createCard(item.link, item.name, deleteCard, likeCard, openPopupImage));
 });
 
+
+
+const popups = document.querySelectorAll('.popup');
+
+popups.forEach(function (popup) {
+  popup.addEventListener('mousedown', function (evt) {
+
+    // Закрытие модальных окон крестиком
+    if (evt.target.classList.contains('popup__close')) {
+      closeModal(popup);
+    }
+
+    // Закрытие модальных окон оверлеем
+    if (evt.target.classList.contains('popup_is-opened')) {
+      closeModal(popup);
+    }
+
+  });
+});
+
+
 // Открытие модального окна редактирования профиля
 profileEditButton.addEventListener('click', function () {
   openModal(popupTypeEdit);
   getPressKey();
-  getClickOverlay();
+  // getClickOverlay();
   nameInput.value = profileTitle.textContent;
   jobInput.value = profileDescription.textContent;
 });
@@ -55,15 +76,15 @@ profileEditButton.addEventListener('click', function () {
 profileAddButton.addEventListener('click', function () {
   openModal(popupTypeNewCard);
   getPressKey();
-  getClickOverlay();
+  // getClickOverlay();
 });
 
-// Закрытие модальных окон крестиком
-pageContent.addEventListener('click', function (evt) {
-  if (evt.target.classList.contains('popup__close')) {
-    closeModal(evt.target.closest('.popup'));
-  }
-});
+// Закрытие модальных окон крестиком FIXME: popup__close
+// pageContent.addEventListener('click', function (evt) {
+//   if (evt.target.classList.contains('popup__close')) {
+//     closeModal(evt.target.closest('.popup'));
+//   }
+// });
 
 // Редактирование имени и информации о себе
 function handleFormSubmit(evt) {
@@ -93,6 +114,6 @@ function openPopupImage (evt) {
     popupImage.alt = evt.target.alt;
     popupCaption.textContent = evt.target.alt
     getPressKey();
-    getClickOverlay();
+    // getClickOverlay();
   }
 };

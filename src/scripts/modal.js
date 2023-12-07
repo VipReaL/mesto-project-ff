@@ -23,12 +23,12 @@ function getPressKey() {
 }
 
 // Функция закрытие модальных окон оверлеем
-function getClickOverlay() {
-  document.addEventListener('click', function (evt) {
-    if (evt.target.classList.contains('popup_is-opened')) {
-      closeModal(evt.target);
-    }
-  });
-}
+// function getClickOverlay() {
+//   document.addEventListener('click', function (evt) {
+//     if (evt.target.classList.contains('popup_is-opened')) {
+//       closeModal(evt.target);
+//     }
+//   });
+// }
 
-export { openModal, closeModal, getPressKey, getClickOverlay }
+export { openModal, closeModal, getPressKey }
