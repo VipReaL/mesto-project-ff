@@ -1,3 +1,4 @@
+https://github.com/VipReaL/mesto-project-ff
 # Проектная работа Mesto
 Проект Mesto: интерактивная страница, куда можно добавлять фотографии, удалять их и ставить лайки.
 
@@ -11,5 +12,9 @@
 <a href="https://www.figma.com/" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/danielcranney/readme-generator/main/public/icons/skills/figma-colored.svg" width="36" height="36" alt="Figma" /></a>
 </p>
 
+## Сборка проекта Mesto
 
-https://github.com/VipReaL/mesto-project-ff
+```
+npm install
+npm run build
+```
