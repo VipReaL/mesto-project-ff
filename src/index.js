@@ -1,7 +1,7 @@
 import './pages/index.css';
 import { initialCards } from './scripts/cards.js'
 import { createCard, deleteCard, likeCard } from './scripts/card.js'
-import { openModal, closeModal, getPressKey } from './scripts/modal.js'
+import { openModal, closeModal } from './scripts/modal.js'
 
 
 // DOM узлы
@@ -12,7 +12,7 @@ const profileDescription = document.querySelector('.profile__description');
 // Модальное окно редактирования профиля
 const profileEditButton = document.querySelector('.profile__edit-button');
 const popupTypeEdit = document.querySelector('.popup_type_edit');
-const formElement = document.querySelector('.popup__form');
+const formElement = popupTypeEdit.querySelector('.popup__form');
 const nameInput = document.querySelector('.popup__input_type_name');
 const jobInput = document.querySelector('.popup__input_type_description');
 
@@ -29,7 +29,7 @@ const popupImage = document.querySelector('.popup__image');
 const popupCaption = document.querySelector('.popup__caption');
 
 // Закрытие модального окна
-const pageContent = document.querySelector('.page__content');
+const popups = document.querySelectorAll('.popup');
 
 
 // Функция добавления карточки в разметку
@@ -42,10 +42,7 @@ initialCards.forEach(function (item) {
   addCard(createCard(item.link, item.name, deleteCard, likeCard, openPopupImage));
 });
 
-
-
-const popups = document.querySelectorAll('.popup');
-
+// Закрытие модальных окон
 popups.forEach(function (popup) {
   popup.addEventListener('mousedown', function (evt) {
 
@@ -62,12 +59,9 @@ popups.forEach(function (popup) {
   });
 });
 
-
 // Открытие модального окна редактирования профиля
 profileEditButton.addEventListener('click', function () {
   openModal(popupTypeEdit);
-  getPressKey();
-  // getClickOverlay();
   nameInput.value = profileTitle.textContent;
   jobInput.value = profileDescription.textContent;
 });
@@ -75,16 +69,7 @@ profileEditButton.addEventListener('click', function () {
 // Открытие модального окна добавление карточки "Нового места"
 profileAddButton.addEventListener('click', function () {
   openModal(popupTypeNewCard);
-  getPressKey();
-  // getClickOverlay();
 });
-
-// Закрытие модальных окон крестиком FIXME: popup__close
-// pageContent.addEventListener('click', function (evt) {
-//   if (evt.target.classList.contains('popup__close')) {
-//     closeModal(evt.target.closest('.popup'));
-//   }
-// });
 
 // Редактирование имени и информации о себе
 function handleFormSubmit(evt) {
@@ -113,7 +98,5 @@ function openPopupImage (evt) {
     popupImage.src = evt.target.src;
     popupImage.alt = evt.target.alt;
     popupCaption.textContent = evt.target.alt
-    getPressKey();
-    // getClickOverlay();
   }
 };
