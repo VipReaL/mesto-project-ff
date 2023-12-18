@@ -80,4 +80,9 @@ function openPopupImage (evt) {
     popupImage.alt = evt.target.alt;
     popupCaption.textContent = evt.target.alt
   }
-};
+}
+
+// Валидация формы
+function enableValidation () {
+
+}
