@@ -3,6 +3,7 @@ import { initialCards } from './scripts/cards.js'
 import { createCard, deleteCard, likeCard } from './scripts/card.js'
 import { openModal, closeModal } from './scripts/modal.js'
 import { enableValidation, clearValidation } from './scripts/validation.js'
+import { getUserInformation, getInitialCards } from './scripts/api.js'
 
 
 // DOM узлы
@@ -38,6 +39,12 @@ const validationConfig = {
   errorClass: 'popup__error_visible'
 }
 
+
+getUserInformation()
+  .then((res) => {
+    console.log(res._id)
+  })
+
 enableValidation(validationConfig);
 
 // Функция добавления карточки в разметку
@@ -46,9 +53,18 @@ function addCard (markupCard) {
 }
 
 // Вывод карточек на страницу
+/*
 initialCards.forEach(function (item) {
   addCard(createCard(item.link, item.name, deleteCard, likeCard, openPopupImage));
 });
+*/
+getInitialCards()
+  .then((res) => {
+    res.forEach(function (item) {
+      addCard(createCard(item.link, item.name, deleteCard, likeCard, openPopupImage));
+    })
+  })
+
 
 // Открытие модального окна редактирования профиля
 profileEditButton.addEventListener('click', function () {

@@ -1,3 +1,46 @@
+const config = {
+  baseUrl: 'https://nomoreparties.co/v1/wff-cohort-3',
+  headers: {
+    authorization: '780399dd-8a4c-4128-8a16-84ec09c34b7d',
+    'Content-Type': 'application/json'
+  }
+}
+
+const getUserInformation = () => {
+  return fetch(`${config.baseUrl}/users/me`, {
+    headers: config.headers
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      return Promise.reject(`Ошибка: ${response.status}`);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+}
+
+const getInitialCards = () => {
+  return fetch(`${config.baseUrl}/cards`, {
+    headers: config.headers
+  })
+  .then((response) => {
+    if (response.ok) {
+      return response.json();
+    }
+    return Promise.reject(`Ошибка: ${response.status}`);
+  })
+  .catch((error) => {
+    console.log(error);
+  })
+}
+
+export { getUserInformation, getInitialCards }
+
+
+
+
 /*
 в файле api.js описаны функции для взаимодействия с сервером;
 
@@ -9,7 +52,8 @@
 
 базовый адрес сервера и ключ авторизации вынесены отдельно и переиспользуются;
 
-функция создания карточки принимает в качестве параметров данные карточки, функции обработки её событий и id текущего пользователя;
+функция создания карточки принимает в качестве параметров данные карточки,
+функции обработки её событий и id текущего пользователя;
 */
 
 /*
