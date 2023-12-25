@@ -1,9 +1,9 @@
 import './pages/index.css';
-import { initialCards } from './scripts/cards.js'
+// import { initialCards } from './scripts/cards.js' // FIXME:
 import { createCard, deleteCard, likeCard } from './scripts/card.js'
 import { openModal, closeModal } from './scripts/modal.js'
 import { enableValidation, clearValidation } from './scripts/validation.js'
-import { getUserInformation, getInitialCards } from './scripts/api.js'
+import { getUserInformation, getInitialCards, EditingProfile, addNewCard } from './scripts/api.js'
 
 
 // DOM узлы
@@ -39,18 +39,21 @@ const validationConfig = {
   errorClass: 'popup__error_visible'
 }
 
-
-getUserInformation()
-  .then((res) => {
-    console.log(res._id)
-  })
-
 enableValidation(validationConfig);
 
-// Функция добавления карточки в разметку
+// Функция добавления карточек в разметку
 function addCard (markupCard) {
   placesList.append(markupCard);
 }
+
+Promise.all([getInitialCards(), getUserInformation()])
+  .then(([cards, information]) => {
+    profileTitle.textContent = information.name;
+    profileDescription.textContent = information.about;
+    cards.forEach(function (item) {
+      addCard(createCard(item.link, item.name, deleteCard, likeCard, openPopupImage));
+    })
+  })
 
 // Вывод карточек на страницу
 /*
@@ -58,13 +61,19 @@ initialCards.forEach(function (item) {
   addCard(createCard(item.link, item.name, deleteCard, likeCard, openPopupImage));
 });
 */
-getInitialCards()
-  .then((res) => {
-    res.forEach(function (item) {
-      addCard(createCard(item.link, item.name, deleteCard, likeCard, openPopupImage));
-    })
-  })
+// getInitialCards()
+//   .then((res) => {
+//     res.forEach(function (item) {
+//       addCard(createCard(item.link, item.name, deleteCard, likeCard, openPopupImage));
+//     })
+//   })
 
+// Загрузка информации о пользователе с сервера
+// getUserInformation()
+//   .then((res) => {
+//     profileTitle.textContent = res.name;
+//     profileDescription.textContent = res.about;
+//   })
 
 // Открытие модального окна редактирования профиля
 profileEditButton.addEventListener('click', function () {
@@ -86,8 +95,13 @@ formElement.addEventListener('submit', handleFormSubmit);
 
 function handleFormSubmit(evt) {
   evt.preventDefault();
-  profileTitle.textContent = nameInput.value;
-  profileDescription.textContent = jobInput.value;
+
+  EditingProfile(nameInput.value, jobInput.value)
+    .then((res) => {
+      profileTitle.textContent = res.name;
+      profileDescription.textContent = res.about;
+    })
+
   closeModal(evt.target.closest('.popup'));
 }
 
@@ -96,7 +110,14 @@ newPlace.addEventListener('submit', addCardUser);
 
 function addCardUser(evt) {
   evt.preventDefault();
-  placesList.prepend(createCard(link.value, placeName.value, deleteCard, likeCard, openPopupImage));
+  
+  // placesList.prepend(createCard(link.value, placeName.value, deleteCard, likeCard, openPopupImage));
+  
+  addNewCard(placeName.value, link.value)
+    .then((data) => {
+        placesList.prepend(createCard(data.link, data.name, deleteCard, likeCard, openPopupImage));
+      })
+  
   newPlace.reset();
   closeModal(evt.target.closest('.popup'));
 }
@@ -110,3 +131,4 @@ function openPopupImage (evt) {
     popupCaption.textContent = evt.target.alt
   }
 }
+

@@ -1,3 +1,5 @@
+import { displayingLikes, deleteLikes } from './api.js'
+
 //Функция создания карточки
 function createCard (imageSrc, nameValue, deleteHandler, likeButton, openImage) {
   const template = document.querySelector('#card-template').content;
@@ -26,9 +28,30 @@ function deleteCard (event) {
 }
 
 // Функция лайк карточки
-function likeCard (evt) {
-  if (evt.target.classList.contains('card__like-button')) {
-    evt.target.classList.toggle('card__like-button_is-active')
+// function likeCard (evt) {
+//   if (evt.target.classList.contains('card__like-button')) {
+//     evt.target.classList.toggle('card__like-button_is-active')
+//   }
+// }
+
+function likeCard (evt, cardId) {
+  if (!evt.target.classList.contains('card__like-button_is-active')) {
+    evt.target.classList.add('card__like-button_is-active');
+
+    // const first = evt.target.closest('.card__description');
+    // const nameLikeClick = first.firstElementChild.textContent;
+    
+    displayingLikes(cardId)
+      .then((dataCard) => {
+        console.log(dataCard)
+      })
+  } else {
+    evt.target.classList.remove('card__like-button_is-active');
+
+    deleteLikes(cardId)
+    .then((dataCard) => {
+      console.log(dataCard)
+    })
   }
 }
 

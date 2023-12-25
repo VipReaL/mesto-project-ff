@@ -5,3 +5,15 @@
   background: #fff;
   padding: 25px 20px;
 }
+
+.card__description-like {
+  display: flex;
+  flex-direction: column;
+  row-gap: 3px;
+  align-items: center;
+}
+
+.card__like-count {
+  font-size: 13px;
+  line-height: normal;
+}
