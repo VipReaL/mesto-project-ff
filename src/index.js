@@ -39,6 +39,7 @@ const validationConfig = {
   errorClass: 'popup__error_visible'
 }
 
+// Включение валидации инпутов
 enableValidation(validationConfig);
 
 // Функция добавления карточек в разметку
@@ -46,34 +47,21 @@ function addCard (markupCard) {
   placesList.append(markupCard);
 }
 
+// Создание карточек
 Promise.all([getInitialCards(), getUserInformation()])
   .then(([cards, information]) => {
     profileTitle.textContent = information.name;
     profileDescription.textContent = information.about;
     cards.forEach(function (item) {
-      addCard(createCard(item.link, item.name, deleteCard, likeCard, openPopupImage));
+      addCard(createCard(item.link, item.name, deleteCard, likeCard, item._id, item.likes, openPopupImage));
     })
   })
 
-// Вывод карточек на страницу
 /*
 initialCards.forEach(function (item) {
   addCard(createCard(item.link, item.name, deleteCard, likeCard, openPopupImage));
 });
 */
-// getInitialCards()
-//   .then((res) => {
-//     res.forEach(function (item) {
-//       addCard(createCard(item.link, item.name, deleteCard, likeCard, openPopupImage));
-//     })
-//   })
-
-// Загрузка информации о пользователе с сервера
-// getUserInformation()
-//   .then((res) => {
-//     profileTitle.textContent = res.name;
-//     profileDescription.textContent = res.about;
-//   })
 
 // Открытие модального окна редактирования профиля
 profileEditButton.addEventListener('click', function () {
@@ -115,7 +103,8 @@ function addCardUser(evt) {
   
   addNewCard(placeName.value, link.value)
     .then((data) => {
-        placesList.prepend(createCard(data.link, data.name, deleteCard, likeCard, openPopupImage));
+        console.log(data);
+        placesList.prepend(createCard(data.link, data.name, deleteCard, likeCard, data._id, data.likes, openPopupImage));
       })
   
   newPlace.reset();

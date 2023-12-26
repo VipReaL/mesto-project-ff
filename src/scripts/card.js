@@ -1,7 +1,7 @@
 import { displayingLikes, deleteLikes } from './api.js'
 
 //Функция создания карточки
-function createCard (imageSrc, nameValue, deleteHandler, likeButton, openImage) {
+function createCard (imageSrc, nameValue, deleteHandler, likeButton, cardId, likeCount, openImage) {
   const template = document.querySelector('#card-template').content;
   const templateElement = template.querySelector('.card').cloneNode(true);
 
@@ -14,7 +14,11 @@ function createCard (imageSrc, nameValue, deleteHandler, likeButton, openImage) 
   deleteButton.addEventListener('click', deleteHandler);
 
   const cardLikeButton = templateElement.querySelector('.card__like-button');
+  cardLikeButton.dataset.cardId = cardId;
   cardLikeButton.addEventListener('mousedown', likeButton);
+
+  const cardLikeCount = templateElement.querySelector('.card__like-count');
+  cardLikeCount.textContent = likeCount.length;
 
   const cardImage = templateElement.querySelector('.card__image');
   cardImage.addEventListener('mousedown', openImage);
@@ -28,30 +32,24 @@ function deleteCard (event) {
 }
 
 // Функция лайк карточки
-// function likeCard (evt) {
-//   if (evt.target.classList.contains('card__like-button')) {
-//     evt.target.classList.toggle('card__like-button_is-active')
-//   }
-// }
+function likeCard (evt) {
+  const cardId = evt.target.dataset.cardId;
+  const cardLikeCount = evt.target.nextElementSibling;
 
-function likeCard (evt, cardId) {
   if (!evt.target.classList.contains('card__like-button_is-active')) {
     evt.target.classList.add('card__like-button_is-active');
-
-    // const first = evt.target.closest('.card__description');
-    // const nameLikeClick = first.firstElementChild.textContent;
     
     displayingLikes(cardId)
       .then((dataCard) => {
-        console.log(dataCard)
+        cardLikeCount.textContent = dataCard.likes.length
       })
   } else {
     evt.target.classList.remove('card__like-button_is-active');
-
+    
     deleteLikes(cardId)
-    .then((dataCard) => {
-      console.log(dataCard)
-    })
+      .then((dataCard) => {
+        cardLikeCount.textContent = dataCard.likes.length
+      })
   }
 }
 
