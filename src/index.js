@@ -1,6 +1,6 @@
 import './pages/index.css';
 // import { initialCards } from './scripts/cards.js' // FIXME:
-import { createCard, deleteCard, likeCard } from './scripts/card.js'
+import { createCard, likeCard } from './scripts/card.js'
 import { openModal, closeModal } from './scripts/modal.js'
 import { enableValidation, clearValidation } from './scripts/validation.js'
 import { getUserInformation, getInitialCards, EditingProfile, addNewCard } from './scripts/api.js'
@@ -47,19 +47,23 @@ function addCard (markupCard) {
   placesList.append(markupCard);
 }
 
+export let userId;
+
 // Создание карточек
-Promise.all([getInitialCards(), getUserInformation()])
+Promise.all([getInitialCards(), getUserInformation(userId)])
   .then(([cards, information]) => {
+    userId = information._id;
     profileTitle.textContent = information.name;
     profileDescription.textContent = information.about;
     cards.forEach(function (item) {
-      addCard(createCard(item.link, item.name, deleteCard, likeCard, item._id, item.likes, openPopupImage));
+      addCard(createCard(item.link, item.name, item.owner._id, likeCard, item._id, item.likes, openPopupImage));
     })
   })
 
 /*
 initialCards.forEach(function (item) {
   addCard(createCard(item.link, item.name, deleteCard, likeCard, openPopupImage));
+  addCard(createCard(item.link, item.name, item.owner._id, likeCard, item._id, item.likes, openPopupImage));
 });
 */
 
@@ -104,7 +108,7 @@ function addCardUser(evt) {
   addNewCard(placeName.value, link.value)
     .then((data) => {
         console.log(data);
-        placesList.prepend(createCard(data.link, data.name, deleteCard, likeCard, data._id, data.likes, openPopupImage));
+        placesList.prepend(createCard(data.link, data.name, data.owner._id, likeCard, data._id, data.likes, openPopupImage));
       })
   
   newPlace.reset();
@@ -120,4 +124,3 @@ function openPopupImage (evt) {
     popupCaption.textContent = evt.target.alt
   }
 }
-

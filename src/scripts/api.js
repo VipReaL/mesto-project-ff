@@ -137,5 +137,6 @@ export {
   EditingProfile,
   addNewCard,
   displayingLikes,
-  deleteLikes
+  deleteLikes,
+  userDeleteCard
 }
