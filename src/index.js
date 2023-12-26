@@ -1,6 +1,5 @@
 import './pages/index.css';
-// import { initialCards } from './scripts/cards.js' // FIXME:
-import { createCard, likeCard } from './scripts/card.js'
+import { createCard } from './scripts/card.js'
 import { openModal, closeModal } from './scripts/modal.js'
 import { enableValidation, clearValidation } from './scripts/validation.js'
 import { getUserInformation, getInitialCards, EditingProfile, addNewCard } from './scripts/api.js'
@@ -10,6 +9,11 @@ import { getUserInformation, getInitialCards, EditingProfile, addNewCard } from 
 const placesList = document.querySelector('.places__list');
 const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
+
+// Модальное окно редактирования аватара профиля
+const profileImage = document.querySelector('.profile__image');
+const popupTypeAvatar = document.querySelector('.popup_type_avatar');
+const updateAvatar = document.forms['update-avatar'];
 
 // Модальное окно редактирования профиля
 const profileEditButton = document.querySelector('.profile__edit-button');
@@ -56,16 +60,16 @@ Promise.all([getInitialCards(), getUserInformation(userId)])
     profileTitle.textContent = information.name;
     profileDescription.textContent = information.about;
     cards.forEach(function (item) {
-      addCard(createCard(item.link, item.name, item.owner._id, likeCard, item._id, item.likes, openPopupImage));
+      addCard(createCard(item.link, item.name, item.owner._id, item._id, item.likes, openPopupImage));
     })
   })
 
-/*
-initialCards.forEach(function (item) {
-  addCard(createCard(item.link, item.name, deleteCard, likeCard, openPopupImage));
-  addCard(createCard(item.link, item.name, item.owner._id, likeCard, item._id, item.likes, openPopupImage));
-});
-*/
+// Открытие модального окна редактирования аватара профиля // FIXME:
+profileImage.addEventListener('click', function () {
+  updateAvatar.reset();
+  clearValidation(updateAvatar, validationConfig);
+  openModal(popupTypeAvatar);
+})
 
 // Открытие модального окна редактирования профиля
 profileEditButton.addEventListener('click', function () {
@@ -103,12 +107,10 @@ newPlace.addEventListener('submit', addCardUser);
 function addCardUser(evt) {
   evt.preventDefault();
   
-  // placesList.prepend(createCard(link.value, placeName.value, deleteCard, likeCard, openPopupImage));
-  
   addNewCard(placeName.value, link.value)
     .then((data) => {
         console.log(data);
-        placesList.prepend(createCard(data.link, data.name, data.owner._id, likeCard, data._id, data.likes, openPopupImage));
+        placesList.prepend(createCard(data.link, data.name, data.owner._id, data._id, data.likes, openPopupImage));
       })
   
   newPlace.reset();

@@ -2,16 +2,17 @@ import { displayingLikes, deleteLikes, userDeleteCard } from './api.js'
 import { userId } from '../index.js'
 
 // Функция создания карточки
-function createCard (imageSrc, nameValue, ownerId, likeButton, cardId, likeCount, openImage) {
+function createCard (imageSrc, nameValue, ownerId, cardId, likeCount, openImage) {
   const template = document.querySelector('#card-template').content;
   const templateElement = template.querySelector('.card').cloneNode(true);
 
   templateElement.dataset.cardId = cardId;
+  templateElement.querySelector('.card__title').textContent = nameValue;
 
   const image = templateElement.querySelector('.card__image');
   image.src = imageSrc;
   image.alt = nameValue;
-  templateElement.querySelector('.card__title').textContent = nameValue;
+  image.addEventListener('mousedown', openImage);
 
   const deleteButton = templateElement.querySelector('.card__delete-button');
   if (userId === ownerId) {
@@ -21,19 +22,16 @@ function createCard (imageSrc, nameValue, ownerId, likeButton, cardId, likeCount
   }
 
   const cardLikeButton = templateElement.querySelector('.card__like-button');
-  cardLikeButton.addEventListener('mousedown', likeButton);
+  cardLikeButton.addEventListener('mousedown', likeCard);
 
+  const cardLikeCount = templateElement.querySelector('.card__like-count');
+  cardLikeCount.textContent = likeCount.length;
+  
   likeCount.forEach((item) => {
     if (userId === item._id) {
       cardLikeButton.classList.add('card__like-button_is-active');
     }
   })
-
-  const cardLikeCount = templateElement.querySelector('.card__like-count');
-  cardLikeCount.textContent = likeCount.length;
-
-  const cardImage = templateElement.querySelector('.card__image');
-  cardImage.addEventListener('mousedown', openImage);
 
   return templateElement
 }
@@ -69,4 +67,4 @@ function likeCard (evt) {
   }
 }
 
-export { createCard, likeCard }
+export { createCard }
