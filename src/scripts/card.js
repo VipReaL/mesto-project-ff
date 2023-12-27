@@ -52,17 +52,21 @@ function likeCard (evt) {
 
   if (!evt.target.classList.contains('card__like-button_is-active')) {
     evt.target.classList.add('card__like-button_is-active');
-    
     displayingLikes(cardId)
       .then((dataCard) => {
         cardLikeCount.textContent = dataCard.likes.length;
       })
+      .catch((error) => {
+        console.log(error);
+      })
   } else {
     evt.target.classList.remove('card__like-button_is-active');
-    
     deleteLikes(cardId)
       .then((dataCard) => {
         cardLikeCount.textContent = dataCard.likes.length;
+      })
+      .catch((error) => {
+        console.log(error);
       })
   }
 }

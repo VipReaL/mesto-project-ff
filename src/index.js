@@ -5,7 +5,7 @@ import { enableValidation, clearValidation } from './scripts/validation.js'
 import { 
   getUserInformation,
   getInitialCards,
-  EditingProfile,
+  editingProfile,
   addNewCard,
   updatingUserAvatar
 } from './scripts/api.js'
@@ -17,7 +17,8 @@ const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
 
 // Модальное окно редактирования аватара профиля
-const profileImage = document.querySelector('.profile__image');
+const imageContainer = document.querySelector('.profile__image-container');
+const profileImage = imageContainer.querySelector('.profile__image');
 const popupTypeAvatar = document.querySelector('.popup_type_avatar');
 const updateAvatar = document.forms['update-avatar'];
 const inputAvatar = updateAvatar.elements['avatar'];
@@ -53,6 +54,15 @@ const validationConfig = {
 // Включение валидации инпутов
 enableValidation(validationConfig);
 
+// функция отображения процесса загрузки
+function loading (load, button) {
+  if (load) {
+    button.textContent = "Сохранение...";
+  } else {
+    button.textContent = "Сохранить";
+  }
+}
+
 // Функция добавления карточек в разметку
 function addCard (markupCard) {
   placesList.append(markupCard);
@@ -71,9 +81,12 @@ Promise.all([getInitialCards(), getUserInformation()])
       addCard(createCard(item.link, item.name, item.owner._id, item._id, item.likes, openPopupImage));
     })
   })
+  .catch((error) => {
+    console.log(error);
+  })
 
 // Открытие модального окна редактирования аватара профиля
-profileImage.addEventListener('click', function () {
+imageContainer.addEventListener('click', function () {
   updateAvatar.reset();
   clearValidation(updateAvatar, validationConfig);
   openModal(popupTypeAvatar);
@@ -84,12 +97,20 @@ updateAvatar.addEventListener('submit', editingProfileAvatar);
 
 function editingProfileAvatar(evt) {
   evt.preventDefault();
+  loading(true, updateAvatar.elements['button']);
   const urlAvatar = inputAvatar.value;
   updatingUserAvatar(urlAvatar)
     .then((data) => {
       profileImage.src = data.avatar;
     })
-  }
+    .catch((error) => {
+      console.log(error);
+    })
+    .finally(() => {
+      loading(false, updateAvatar.elements['button']);
+      closeModal(evt.target.closest('.popup'));
+    })
+}
 
 // Открытие модального окна редактирования профиля
 profileEditButton.addEventListener('click', function () {
@@ -111,14 +132,19 @@ formElement.addEventListener('submit', handleFormSubmit);
 
 function handleFormSubmit(evt) {
   evt.preventDefault();
-
-  EditingProfile(nameInput.value, jobInput.value)
+  loading(true, formElement.querySelector('.button'));
+  editingProfile(nameInput.value, jobInput.value)
     .then((res) => {
       profileTitle.textContent = res.name;
       profileDescription.textContent = res.about;
     })
-
-  closeModal(evt.target.closest('.popup'));
+    .catch((error) => {
+      console.log(error);
+    })
+    .finally(() => {
+      loading(false, formElement.querySelector('.button'));
+      closeModal(evt.target.closest('.popup'));
+    })
 }
 
 // Получение данных карточки от пользователя
@@ -126,14 +152,19 @@ newPlace.addEventListener('submit', addCardUser);
 
 function addCardUser(evt) {
   evt.preventDefault();
-  
+  loading(true, newPlace.elements['button']);
   addNewCard(placeName.value, link.value)
     .then((data) => {
-        placesList.prepend(createCard(data.link, data.name, data.owner._id, data._id, data.likes, openPopupImage));
-      })
-  
-  newPlace.reset();
-  closeModal(evt.target.closest('.popup'));
+      placesList.prepend(createCard(data.link, data.name, data.owner._id, data._id, data.likes, openPopupImage));
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    .finally(() => {
+      loading(false, newPlace.elements['button']);
+      newPlace.reset();
+      closeModal(evt.target.closest('.popup'));
+    })
 }
 
 // Открытие модального окна с картинкой

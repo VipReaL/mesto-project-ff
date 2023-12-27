@@ -39,7 +39,7 @@ const getInitialCards = () => {
 }
 
 // Редактирование профиля
-const EditingProfile = (nameInput, jobInput) => {
+const editingProfile = (nameInput, jobInput) => {
   return fetch(`${config.baseUrl}/users/me`, {
     method: 'PATCH',
     headers: config.headers,
@@ -154,7 +154,7 @@ const updatingUserAvatar = (urlAvatar) => {
 export {
   getUserInformation,
   getInitialCards,
-  EditingProfile,
+  editingProfile,
   addNewCard,
   displayingLikes,
   deleteLikes,
