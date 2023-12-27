@@ -4,6 +4,7 @@
   margin: 0 29px 0 0;
   position: relative;
   transition: 0.3s;
+  cursor: pointer;
 }
 
 .profile__image-container::after {

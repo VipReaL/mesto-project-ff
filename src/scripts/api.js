@@ -144,7 +144,7 @@ const updatingUserAvatar = (urlAvatar) => {
     if (response.ok) {
       return response.json();
     }
-    return Promise.reject(`Ошибка редактирование профиля: ${response.status}`);
+    return Promise.reject(`Ошибка редактирование аватара профиля: ${response.status}`);
   })
   .catch((error) => {
     console.log(error);
