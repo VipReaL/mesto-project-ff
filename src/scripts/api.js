@@ -131,6 +131,26 @@ const userDeleteCard = (cardId) => {
   })
 }
 
+// Обновление аватара пользователя
+const updatingUserAvatar = (urlAvatar) => {
+  return fetch(`${config.baseUrl}/users/me/avatar`, {
+    method: 'PATCH',
+    headers: config.headers,
+    body: JSON.stringify({
+      avatar: urlAvatar
+    }) 
+  })
+  .then((response) => {
+    if (response.ok) {
+      return response.json();
+    }
+    return Promise.reject(`Ошибка редактирование профиля: ${response.status}`);
+  })
+  .catch((error) => {
+    console.log(error);
+  })
+}
+
 export {
   getUserInformation,
   getInitialCards,
@@ -138,5 +158,6 @@ export {
   addNewCard,
   displayingLikes,
   deleteLikes,
-  userDeleteCard
+  userDeleteCard,
+  updatingUserAvatar
 }

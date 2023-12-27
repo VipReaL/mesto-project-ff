@@ -2,7 +2,13 @@ import './pages/index.css';
 import { createCard } from './scripts/card.js'
 import { openModal, closeModal } from './scripts/modal.js'
 import { enableValidation, clearValidation } from './scripts/validation.js'
-import { getUserInformation, getInitialCards, EditingProfile, addNewCard } from './scripts/api.js'
+import { 
+  getUserInformation,
+  getInitialCards,
+  EditingProfile,
+  addNewCard,
+  updatingUserAvatar
+} from './scripts/api.js'
 
 
 // DOM узлы
@@ -14,6 +20,7 @@ const profileDescription = document.querySelector('.profile__description');
 const profileImage = document.querySelector('.profile__image');
 const popupTypeAvatar = document.querySelector('.popup_type_avatar');
 const updateAvatar = document.forms['update-avatar'];
+const inputAvatar = updateAvatar.elements['avatar'];
 
 // Модальное окно редактирования профиля
 const profileEditButton = document.querySelector('.profile__edit-button');
@@ -54,22 +61,35 @@ function addCard (markupCard) {
 export let userId;
 
 // Создание карточек
-Promise.all([getInitialCards(), getUserInformation(userId)])
+Promise.all([getInitialCards(), getUserInformation()])
   .then(([cards, information]) => {
     userId = information._id;
     profileTitle.textContent = information.name;
     profileDescription.textContent = information.about;
+    profileImage.src = information.avatar;
     cards.forEach(function (item) {
       addCard(createCard(item.link, item.name, item.owner._id, item._id, item.likes, openPopupImage));
     })
   })
 
-// Открытие модального окна редактирования аватара профиля // FIXME:
+// Открытие модального окна редактирования аватара профиля
 profileImage.addEventListener('click', function () {
   updateAvatar.reset();
   clearValidation(updateAvatar, validationConfig);
   openModal(popupTypeAvatar);
 })
+
+// Редактирования аватара профиля
+updateAvatar.addEventListener('submit', editingProfileAvatar);
+
+function editingProfileAvatar(evt) {
+  evt.preventDefault();
+  const urlAvatar = inputAvatar.value;
+  updatingUserAvatar(urlAvatar)
+    .then((data) => {
+      profileImage.src = data.avatar;
+    })
+  }
 
 // Открытие модального окна редактирования профиля
 profileEditButton.addEventListener('click', function () {
@@ -109,7 +129,6 @@ function addCardUser(evt) {
   
   addNewCard(placeName.value, link.value)
     .then((data) => {
-        console.log(data);
         placesList.prepend(createCard(data.link, data.name, data.owner._id, data._id, data.likes, openPopupImage));
       })
   
