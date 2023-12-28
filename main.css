@@ -20,7 +20,7 @@
 
 .places{font-family:Inter,Arial,sans-serif;padding:15px 0 36px}@media screen and (max-width:568px){.places{padding:15px 0 18px}}
 .card__description{align-items:center;background:#fff;display:flex;justify-content:space-between;padding:25px 20px}.card__description-like{align-items:center;display:flex;flex-direction:column;row-gap:3px}.card__like-count{font-size:13px;line-height:normal}
-.card__image{height:282px;-o-object-fit:cover;object-fit:cover;width:100%}.card__image:hover{cursor:pointer}
+.card__image{display:flex;height:282px;-o-object-fit:cover;object-fit:cover;-o-object-position:center;object-position:center;width:100%}.card__image:hover{cursor:pointer}
 .card__like-button{background:transparent url(images/like-inactive.df0c965524717a3fd8e9.svg) no-repeat;background-size:21px 18px;border:none;cursor:pointer;height:18px;margin:0;padding:0;transition:.3s;width:21px}.card__like-button:hover{opacity:.6}
 .card__like-button_is-active{background:transparent url(images/like-active.a7ffe37dcb927ba0c46c.svg) no-repeat}
 .card__delete-button_disabled{display:none}
