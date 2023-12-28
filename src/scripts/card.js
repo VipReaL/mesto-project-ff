@@ -1,22 +1,22 @@
-import { displayingLikes, deleteLikes, userDeleteCard } from './api.js'
-import { userId } from '../index.js'
-import { openModal, closeModal } from './modal.js'
+import { displayingLikes, deleteLikes, userDeleteCard } from './api.js';
+import { closePopup } from './modal.js';
+import { popupDelete } from './variables.js';
 
 // Функция создания карточки
-function createCard (imageSrc, nameValue, ownerId, cardId, likeCount, openImage) {
+function createCard (cardData, openImage, userId, checkingDeleteCard, likeCard) {
   const template = document.querySelector('#card-template').content;
   const templateElement = template.querySelector('.card').cloneNode(true);
 
-  templateElement.dataset.idCard = cardId;
-  templateElement.querySelector('.card__title').textContent = nameValue;
+  templateElement.dataset.idCard = cardData.cardId;
+  templateElement.querySelector('.card__title').textContent = cardData.name;
 
   const image = templateElement.querySelector('.card__image');
-  image.src = imageSrc;
-  image.alt = nameValue;
+  image.src = cardData.link;
+  image.alt = cardData.name;
   image.addEventListener('mousedown', openImage);
 
   const deleteButton = templateElement.querySelector('.card__delete-button');
-  if (userId === ownerId) {
+  if (userId === cardData.userId) {
     deleteButton.addEventListener('click', checkingDeleteCard);
   } else {
     deleteButton.classList.add('card__delete-button_disabled')
@@ -26,9 +26,9 @@ function createCard (imageSrc, nameValue, ownerId, cardId, likeCount, openImage)
   cardLikeButton.addEventListener('mousedown', likeCard);
 
   const cardLikeCount = templateElement.querySelector('.card__like-count');
-  cardLikeCount.textContent = likeCount.length;
+  cardLikeCount.textContent = cardData.likes.length;
   
-  likeCount.forEach((item) => {
+  cardData.likes.forEach((item) => {
     if (userId === item._id) {
       cardLikeButton.classList.add('card__like-button_is-active');
     }
@@ -37,33 +37,14 @@ function createCard (imageSrc, nameValue, ownerId, cardId, likeCount, openImage)
   return templateElement
 }
 
-// Функция открытие модального окна подтверждения удаления карточки
-function checkingDeleteCard (evt) {
-  const card = evt.target.closest('.card');
-  const cardId = card.dataset.idCard;
-  const popupTypeDelete = document.querySelector('.popup_type_delete');
-  
-  popupTypeDelete.dataset.idCard = cardId;
-  openModal(popupTypeDelete);
-}
-
-// Функция удаления карточки
-const popupButtonDelete = document.querySelector('.popup__button-delete')
-popupButtonDelete.addEventListener('click', deleteCard);
-
+// Функция удаление карточки
 function deleteCard (evt) {
-  const popupTypeDelete = evt.target.closest('.popup_type_delete');
-  const cardId = popupTypeDelete.dataset.idCard;
-  const cardAll = document.querySelectorAll('.card');
-
-  cardAll.forEach((card) => {
-    if (card.dataset.idCard === cardId) {
-      card.remove();
-    }
-  })
+  const cardId = popupDelete.dataset.idCard;
+  const card = document.querySelector(`[data-id-card="${cardId}"]`);
   userDeleteCard(cardId)
     .then(() => {
-      closeModal(popupTypeDelete);
+      card.remove();
+      closePopup(popupDelete);
     })
     .catch((error) => {
       console.log(error);
@@ -77,24 +58,24 @@ function likeCard (evt) {
   const cardLikeCount = evt.target.nextElementSibling;
 
   if (!evt.target.classList.contains('card__like-button_is-active')) {
-    evt.target.classList.add('card__like-button_is-active');
     displayingLikes(cardId)
-      .then((dataCard) => {
-        cardLikeCount.textContent = dataCard.likes.length;
-      })
-      .catch((error) => {
-        console.log(error);
-      })
+    .then((dataCard) => {
+      cardLikeCount.textContent = dataCard.likes.length;
+      evt.target.classList.add('card__like-button_is-active');
+    })
+    .catch((error) => {
+      console.log(error);
+    })
   } else {
-    evt.target.classList.remove('card__like-button_is-active');
     deleteLikes(cardId)
-      .then((dataCard) => {
-        cardLikeCount.textContent = dataCard.likes.length;
-      })
-      .catch((error) => {
-        console.log(error);
-      })
+    .then((dataCard) => {
+      cardLikeCount.textContent = dataCard.likes.length;
+      evt.target.classList.remove('card__like-button_is-active');
+    })
+    .catch((error) => {
+      console.log(error);
+    })
   }
 }
 
-export { createCard }
+export { createCard, deleteCard, likeCard }

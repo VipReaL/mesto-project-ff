@@ -1,11 +1,11 @@
 // функция открытия модальных окон
-function openModal(evt) {
+function openPopup(evt) {
   evt.classList.add('popup_is-opened');
   document.addEventListener('keydown', closeByEscape);
 }
 
 // функция закрытия модальных окон
-function closeModal(evt) {
+function closePopup(evt) {
   evt.classList.remove('popup_is-opened');
   document.removeEventListener('keydown', closeByEscape);
 }
@@ -14,7 +14,7 @@ function closeModal(evt) {
 function closeByEscape (evt) {
   if (evt.key === 'Escape') {
     const popupIsOpened = document.querySelector('.popup_is-opened');
-    closeModal(popupIsOpened);
+    closePopup(popupIsOpened);
   }
 }
 
@@ -25,15 +25,15 @@ popups.forEach(function (popup) {
 
     // Закрытие модальных окон крестиком
     if (evt.target.classList.contains('popup__close')) {
-      closeModal(popup);
+      closePopup(popup);
     }
 
     // Закрытие модальных окон оверлеем
     if (evt.target.classList.contains('popup_is-opened')) {
-      closeModal(popup);
+      closePopup(popup);
     }
 
   });
 });
 
-export { openModal, closeModal }
+export { openPopup, closePopup }

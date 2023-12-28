@@ -6,20 +6,19 @@ const config = {
   }
 }
 
+function getResponseData(res) {
+  if (!res.ok) {
+    return Promise.reject(`Ошибка: ${res.status}`);
+  }
+  return res.json();
+} 
+
 // Загрузка информации о пользователе с сервера
 const getUserInformation = () => {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers
   })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      }
-      return Promise.reject(`Ошибка загрузки информации о пользователе с сервера: ${response.status}`);
-    })
-    .catch((error) => {
-      console.log(error);
-    })
+  .then(res => getResponseData(res))
 }
 
 // Загрузка карточек с сервера
@@ -27,15 +26,7 @@ const getInitialCards = () => {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers
   })
-  .then((response) => {
-    if (response.ok) {
-      return response.json();
-    }
-    return Promise.reject(`Ошибка загрузки карточек с сервера: ${response.status}`);
-  })
-  .catch((error) => {
-    console.log(error);
-  })
+  .then(res => getResponseData(res))
 }
 
 // Редактирование профиля
@@ -48,15 +39,7 @@ const editingProfile = (nameInput, jobInput) => {
       about: jobInput
     }) 
   })
-  .then((response) => {
-    if (response.ok) {
-      return response.json();
-    }
-    return Promise.reject(`Ошибка редактирование профиля: ${response.status}`);
-  })
-  .catch((error) => {
-    console.log(error);
-  })
+  .then(res => getResponseData(res))
 }
 
 // Добавление новой карточки
@@ -69,15 +52,7 @@ const addNewCard = (placeName, link) => {
       link: link
     })
   })
-  .then((response) => {
-    if (response.ok) {
-      return response.json();
-    }
-    return Promise.reject(`Ошибка добавления новой карточки: ${response.status}`);
-  })
-  .catch((error) => {
-    console.log(error);
-  })
+  .then(res => getResponseData(res))
 }
 
 // Отображение лайков
@@ -86,15 +61,7 @@ const displayingLikes = (cardId) => {
     method: 'PUT',
     headers: config.headers
   })
-  .then((response) => {
-    if (response.ok) {
-      return response.json();
-    }
-    return Promise.reject(`Ошибка отображение лайков: ${response.status}`);
-  })
-  .catch((error) => {
-    console.log(error);
-  })
+  .then(res => getResponseData(res))
 }
 
 // Удаление лайков
@@ -103,15 +70,7 @@ const deleteLikes = (cardId) => {
     method: 'DELETE',
     headers: config.headers
   })
-  .then((response) => {
-    if (response.ok) {
-      return response.json();
-    }
-    return Promise.reject(`Ошибка удаления лайков: ${response.status}`);
-  })
-  .catch((error) => {
-    console.log(error);
-  })
+  .then(res => getResponseData(res))
 }
 
 // Удаление карточки
@@ -120,15 +79,7 @@ const userDeleteCard = (cardId) => {
     method: 'DELETE',
     headers: config.headers
   })
-  .then((response) => {
-    if (response.ok) {
-      return response.json();
-    }
-    return Promise.reject(`Ошибка удаления карточки: ${response.status}`);
-  })
-  .catch((error) => {
-    console.log(error);
-  })
+  .then(res => getResponseData(res))
 }
 
 // Обновление аватара пользователя
@@ -140,15 +91,7 @@ const updatingUserAvatar = (urlAvatar) => {
       avatar: urlAvatar
     }) 
   })
-  .then((response) => {
-    if (response.ok) {
-      return response.json();
-    }
-    return Promise.reject(`Ошибка редактирование аватара профиля: ${response.status}`);
-  })
-  .catch((error) => {
-    console.log(error);
-  })
+  .then(res => getResponseData(res))
 }
 
 export {
