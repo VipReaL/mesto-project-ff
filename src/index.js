@@ -21,7 +21,7 @@ import {
   imageContainer,
   profileImage,
   popupAvatar,
-  updateAvatar,
+  avatarForm,
   inputAvatar,
   buttonAvatar,
   profileEditButton,
@@ -67,7 +67,7 @@ Promise.all([getInitialCards(), getUserInformation()])
     profileDescription.textContent = information.about;
     profileImage.src = information.avatar;
     cards.forEach(function (item) {
-      let cardData = {
+      const cardData = {
         link: item.link,
         name: item.name,
         userId: item.owner._id,
@@ -83,15 +83,15 @@ Promise.all([getInitialCards(), getUserInformation()])
 
 // Открытие модального окна редактирования аватара профиля
 imageContainer.addEventListener('click', function () {
-  updateAvatar.reset();
-  clearValidation(updateAvatar, validationConfig);
+  avatarForm.reset();
+  clearValidation(avatarForm, validationConfig);
   openPopup(popupAvatar);
 })
 
 // Редактирования аватара профиля
-updateAvatar.addEventListener('submit', editingProfileAvatar);
+avatarForm.addEventListener('submit', submitAvatarForm);
 
-function editingProfileAvatar(evt) {
+function submitAvatarForm(evt) {
   evt.preventDefault();
   loading(true, buttonAvatar);
   const urlAvatar = inputAvatar.value;
@@ -124,9 +124,9 @@ profileAddButton.addEventListener('click', function () {
 });
 
 // Редактирование имени и информации о себе
-editingProfileForm.addEventListener('submit', profileFormSubmit);
+editingProfileForm.addEventListener('submit', submitProfileForm);
 
-function profileFormSubmit(evt) {
+function submitProfileForm(evt) {
   evt.preventDefault();
   loading(true, buttonProfileForm);
   editingProfile(nameInput.value, jobInput.value)

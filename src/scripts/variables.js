@@ -11,9 +11,9 @@ export const popupButtonDelete = document.querySelector('.popup__button-delete')
 export const imageContainer = document.querySelector('.profile__image-container');
 export const profileImage = imageContainer.querySelector('.profile__image');
 export const popupAvatar = document.querySelector('.popup_type_avatar');
-export const updateAvatar = document.forms['update-avatar'];
-export const inputAvatar = updateAvatar.elements['avatar'];
-export const buttonAvatar = updateAvatar.elements['button'];
+export const avatarForm = document.forms['update-avatar'];
+export const inputAvatar = avatarForm.elements['avatar'];
+export const buttonAvatar = avatarForm.elements['button'];
 
 // Модальное окно редактирования профиля
 export const profileEditButton = document.querySelector('.profile__edit-button');

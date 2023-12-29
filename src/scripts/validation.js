@@ -23,6 +23,7 @@ function setEventListeners (
 ) {
   const inputList = Array.from(form.querySelectorAll(inputSelector));
   const submitButton = form.querySelector(submitButtonSelector);
+  toggleButtonState (inputList, submitButton, inactiveButtonClass);
   inputList.forEach((input) => {
     input.addEventListener('input', () => {
       isValid(form, input, inputErrorClass, errorClass);
@@ -86,14 +87,14 @@ function toggleButtonState (inputList, submitButton, inactiveButtonClass) {
 }
 
 // Сброс ошибок валидации формы
-function clearValidation (profileForm, validationConfig) {
-  const inputList = Array.from(profileForm.querySelectorAll(validationConfig.inputSelector));
-  const submitButton = profileForm.querySelector(validationConfig.submitButtonSelector);
+function clearValidation (form, validationConfig) {
+  const inputList = Array.from(form.querySelectorAll(validationConfig.inputSelector));
+  const submitButton = form.querySelector(validationConfig.submitButtonSelector);
   submitButton.classList.add(validationConfig.inactiveButtonClass);
-
+  toggleButtonState (inputList, submitButton, validationConfig.inactiveButtonClass);
   inputList.forEach((input) => {
     clearsFormValidations(
-      profileForm,
+      form,
       input,
       validationConfig.inputErrorClass,
       validationConfig.errorClass

@@ -55,7 +55,7 @@ function deleteCard (evt) {
 function likeCard (evt) {
   const card = evt.target.closest('.card');
   const cardId = card.dataset.idCard;
-  const cardLikeCount = evt.target.nextElementSibling;
+  const cardLikeCount = card.querySelector('.card__like-count');
 
   if (!evt.target.classList.contains('card__like-button_is-active')) {
     displayingLikes(cardId)
